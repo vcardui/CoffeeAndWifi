@@ -8,19 +8,18 @@
 # +----------------------------------------------------------------------------+
 # | Author.......: Vanessa Reteguín <vanessa@reteguin.com>
 # | First release: May 2nd, 2025
-# | Last update..: May 3rd, 2025
+# | Last update..: May 4th, 2025
 # | WhatIs.......: CoffeAndWifi - Main
 # +----------------------------------------------------------------------------+
 
 # ------------ Resources / Documentation involved -------------
 # Jinja Expressions: https://jinja.palletsprojects.com/en/stable/templates/#jinja-filters.length
-
+# SweetAlert Js with Flask: https://github.com/elijahondiek/SweetAlert-Js-with-Flask
 
 # ------------------------- Libraries -------------------------
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, redirect, url_for
 from flask_bootstrap import Bootstrap5
-import csv
-from datetime import datetime
+from csv import reader, writer
 
 from Form import CafeForm
 
@@ -29,12 +28,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap5(app)
 
-# Cafe's Data
-with open('cafe-data.csv', newline='', encoding='utf-8') as cafe_csv:
-    cafe_data = csv.reader(cafe_csv, delimiter=',')
-    cafe_list = []
-    for row in cafe_data:
-        cafe_list.append(row)
+
 
 # Cafe's Database rating options
 ratings = {
@@ -82,17 +76,24 @@ def add_cafe():
 
         # print(newCafe)
 
-        with open('cafe-data.csv', mode='a', newline='') as cafe_csv:
-            write = csv.writer(cafe_csv)
+        with open('cafe-data.csv', mode='a', newline='') as cafeData_csv:
+            write = writer(cafeData_csv)
             write.writerow(newCafe)
 
-        # print("newCaffe added")
-        return render_template('cafes.html', cafes=cafe_list)
+        print("newCaffe added")
+        flash(f"Record Saved!", "success")
+        return redirect( url_for('cafes') )
     return render_template('add.html', form=form)
 
 
 @app.route('/cafes')
 def cafes():
+    # Cafe's Data
+    with open('cafe-data.csv', newline='', encoding='utf-8') as cafe_csv:
+        cafe_data = reader(cafe_csv, delimiter=',')
+        cafe_list = []
+        for row in cafe_data:
+            cafe_list.append(row)
     return render_template('cafes.html', cafes=cafe_list)
 
 

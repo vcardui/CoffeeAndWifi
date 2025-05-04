@@ -8,7 +8,7 @@
 # +----------------------------------------------------------------------------+
 # | Author.......: Vanessa Reteguín <vanessa@reteguin.com>
 # | First release: May 2nd, 2025
-# | Last update..: May 3rd, 2025
+# | Last update..: May 4th, 2025
 # | WhatIs.......: Form - Class
 # +----------------------------------------------------------------------------+
 
@@ -26,8 +26,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, URLField, TimeField, SelectField
 from wtforms.validators import InputRequired, Regexp
-
-import csv
 
 # ------------------------- Classes -------------------------
 class CafeForm(FlaskForm):
